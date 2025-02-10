@@ -1,11 +1,11 @@
 /* eslint-disable import/no-unresolved */
 import { initializers } from '@dropins/tools/initializer.js';
-import {
-  initialize,
-} from 'http://localhost:3002/api.js';
 // import {
-//     initialize,
-//   } from '../__dropins__/storefront-search/dist/api.js';
+//   initialize,
+// } from 'http://localhost:3002/api.js';
+import {
+    initialize,
+  } from '../__dropins__/storefront-search/dist/api.js';
 // eslint-disable-next-line import/no-cycle
 import { initializeDropin } from './index.js';
 import { getConfigValue } from '../configs.js';
@@ -42,8 +42,6 @@ await initializeDropin(async () => {
         'Magento-Store-Code': await getConfigValue('commerce.headers.cs.Magento-Store-Code'),
         'Magento-Store-View-Code': await getConfigValue('commerce.headers.cs.Magento-Store-View-Code'),
         'Content-Type': 'application/json',
-      //   'AC-Environment-Id': storefront.environmentId,
-      //   'AC-Scope-Locale': 'en-US',
         'X-Api-Key': 'search_gql',
       },
   };
@@ -76,26 +74,7 @@ await initializeDropin(async () => {
       route: '/search',
       query: 'q',
     },
-    // Default headers for PLP that are not inteded to be changed
-    defaultHeaders: {
-      'Magento-Environment-Id': storefront.environmentId,
-      'Magento-Website-Code': storefront.websiteCode,
-      'Magento-Store-Code': storefront.storeCode,
-      'Magento-Store-View-Code': storefront.storeViewCode,
-      'Content-Type': 'application/json',
-    //   'AC-Environment-Id': storefront.environmentId,
-    //   'AC-Scope-Locale': 'en-US',
-      'X-Api-Key': 'search_gql',
-    },
-    // Headers that can be changed and are emitted via search event.
-    // Set to Default values of page
-    // searchHeaders: {
-    //   'AC-Channel-Id': 'b726c1e9-2842-4ab5-9b19-ca65c23bbb3b', // Default to Aurora Brand
-    //   'AC-Price-Book-Id': 'aurora', // Default to brand pricebook
-    // },
   };
-  console.log('search init', search);
-  console.log('storefront init', storefront);
 
   return initializers.mountImmediately(initialize, {
     langDefinitions,

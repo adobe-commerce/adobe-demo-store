@@ -12,12 +12,13 @@ export interface RequestError {
 }
 export interface ClientProps {
     apiUrl: string;
-    environmentId: string;
-    websiteCode: string;
-    storeCode: string;
-    storeViewCode: string;
-    apiKey: string;
+    environmentId?: string;
+    websiteCode?: string;
+    storeCode?: string;
+    storeViewCode?: string;
+    apiKey?: string;
     xRequestId?: string;
+    headers?: any;
 }
 export interface StoreDetailsConfig {
     allowAllProducts?: string | boolean;
