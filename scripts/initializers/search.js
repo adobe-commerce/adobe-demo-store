@@ -1,8 +1,8 @@
 /* eslint-disable import/no-unresolved */
 import { initializers } from '@dropins/tools/initializer.js';
 import {
-    initialize,
-  } from '@dropins/storefront-search/dist/api.js';
+  initialize,
+} from '@dropins/storefront-search/dist/api.js';
 // eslint-disable-next-line import/no-cycle
 import { initializeDropin } from './index.js';
 import { fetchPlaceholders } from '../aem.js';

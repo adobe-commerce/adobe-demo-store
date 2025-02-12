@@ -1,16 +1,13 @@
-
 /* eslint-disable import/no-unresolved */
 import { ProductListingPage } from '@dropins/storefront-search/dist/containers/ProductListingPage.js';
 import { render as provider } from '@dropins/storefront-search/dist/render.js';
 import { readBlockConfig } from '../../scripts/aem.js';
 import { getConfigValue } from '../../scripts/configs.js';
 
-//Initializer
+// Initializer
 await import('../../scripts/initializers/search.js');
 
-
 export default async function decorate(block) {
-
   const { category, urlpath, type } = readBlockConfig(block);
   block.textContent = '';
 
@@ -59,25 +56,25 @@ export default async function decorate(block) {
   // Store Config
   const storeConfig = {
     type: 'eds',
-    environmentId: environmentId,
+    environmentId,
     environmentType: (async () => {
       const endpoint = apiUrl;
       return (endpoint.includes('sandbox')) ? 'testing' : '';
     })(),
-    apiKey: apiKey,
-    apiUrl: apiUrl,
-    websiteCode: websiteCode,
-    storeCode: storeCode,
-    storeViewCode: storeViewCode,
-    customerGroup: customerGroup,
+    apiKey,
+    apiUrl,
+    websiteCode,
+    storeCode,
+    storeViewCode,
+    customerGroup,
     route: ({ sku, urlKey }) => `/products/${urlKey}/${sku}`,
     defaultHeaders: {
-        'Magento-Environment-Id': environmentId,
-        'Magento-Website-Code': websiteCode,
-        'Magento-Store-Code': storeCode,
-        'Magento-Store-View-Code': storeViewCode,
-        'Content-Type': 'application/json',
-        'X-Api-Key': xapiKey,
+      'Magento-Environment-Id': environmentId,
+      'Magento-Website-Code': websiteCode,
+      'Magento-Store-Code': storeCode,
+      'Magento-Store-View-Code': storeViewCode,
+      'Content-Type': 'application/json',
+      'X-Api-Key': xapiKey,
     },
     config: plpConfig,
   };
