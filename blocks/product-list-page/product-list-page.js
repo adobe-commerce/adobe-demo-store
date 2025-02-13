@@ -51,7 +51,6 @@ export default async function decorate(block) {
   const storeCode = await getConfigValue('commerce.headers.cs.Magento-Store-Code');
   const storeViewCode = await getConfigValue('commerce.headers.cs.Magento-Store-View-Code');
   const customerGroup = await getConfigValue('commerce.headers.cs.Magento-Customer-Group');
-  const xapiKey = await getConfigValue('commerce.headers.cs.x-api-key');
 
   // Store Config
   const storeConfig = {
@@ -74,7 +73,7 @@ export default async function decorate(block) {
       'Magento-Store-Code': storeCode,
       'Magento-Store-View-Code': storeViewCode,
       'Content-Type': 'application/json',
-      'X-Api-Key': xapiKey,
+      'X-Api-Key': apiKey,
     },
     config: plpConfig,
   };
