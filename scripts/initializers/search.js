@@ -2,7 +2,7 @@
 import { initializers } from '@dropins/tools/initializer.js';
 import {
   initialize,
-} from '@dropins/storefront-search/dist/api.js';
+} from '@dropins/storefront-search/api.js';
 // eslint-disable-next-line import/no-cycle
 import { initializeDropin } from './index.js';
 import { fetchPlaceholders } from '../aem.js';

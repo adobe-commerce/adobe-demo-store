@@ -1,8 +1,8 @@
 /* eslint-disable import/no-unresolved */
-import { ProductListingPage } from '@dropins/storefront-search/dist/containers/ProductListingPage.js';
-import { render as provider } from '@dropins/storefront-search/dist/render.js';
+import { ProductListingPage } from '@dropins/storefront-search/containers/ProductListingPage.js';
+import { render as provider } from '@dropins/storefront-search/render.js';
 import { readBlockConfig } from '../../scripts/aem.js';
-import { getConfigValue } from '../../scripts/configs.js';
+import { getConfigValue, getHeaders } from '../../scripts/configs.js';
 
 // Initializer
 await import('../../scripts/initializers/search.js');
@@ -51,6 +51,7 @@ export default async function decorate(block) {
   const storeCode = await getConfigValue('commerce.headers.cs.Magento-Store-Code');
   const storeViewCode = await getConfigValue('commerce.headers.cs.Magento-Store-View-Code');
   const customerGroup = await getConfigValue('commerce.headers.cs.Magento-Customer-Group');
+  const configHeaders = await getHeaders('cs');
 
   // Store Config
   const storeConfig = {
@@ -68,12 +69,8 @@ export default async function decorate(block) {
     customerGroup,
     route: ({ sku, urlKey }) => `/products/${urlKey}/${sku}`,
     defaultHeaders: {
-      'Magento-Environment-Id': environmentId,
-      'Magento-Website-Code': websiteCode,
-      'Magento-Store-Code': storeCode,
-      'Magento-Store-View-Code': storeViewCode,
       'Content-Type': 'application/json',
-      'X-Api-Key': apiKey,
+      ...configHeaders,
     },
     config: plpConfig,
   };
