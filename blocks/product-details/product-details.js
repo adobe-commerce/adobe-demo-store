@@ -83,9 +83,6 @@ export default async function decorate(block) {
   const $addToCart = fragment.querySelector(
     '.product-details__buttons__add-to-cart',
   );
-  const $notifyMe = fragment.querySelector(
-    '.product-details__buttons__notify-me',
-  );
   const $description = fragment.querySelector('.product-details__description');
   const $attributes = fragment.querySelector('.product-details__attributes');
 
