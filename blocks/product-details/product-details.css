@@ -54,7 +54,7 @@
   gap: var(--grid-1-gutters);
   grid-auto-rows: max-content;
   margin-bottom: var(--spacing-xxbig);
-  margin-top: 0;
+  margin-top: var(--spacing-small);
 }
 
 .product-details__buttons {
