@@ -54,7 +54,7 @@
   gap: var(--grid-1-gutters);
   grid-auto-rows: max-content;
   margin-bottom: var(--spacing-xxbig);
-  margin-top: var(--spacing-big);
+  margin-top: 0;
 }
 
 .product-details__buttons {
@@ -101,7 +101,7 @@
   .product-details__configuration {
     grid-template-columns: repeat(var(--grid-1-columns), 1fr);
     grid-gap: var(--grid-1-gutters);
-    margin-top: var(--spacing-xxbig);
+    margin-top: var(--spacing-big);
   }
 
   .product-details__options {
@@ -200,6 +200,7 @@
     letter-spacing: var(--type-body-1-strong-letter-spacing);
     font-size: 1.8rem;
     font-weight: 900;
+    margin-top: var(--spacing-medium);
 }
 
 .pdp-description p,
@@ -213,9 +214,28 @@
 
 .product-details__sku {
     font-weight: 500;
+    color: var(--color-neutral-600);
+    padding-top: var(--spacing-medium);
 }
 
 .pdp-short-description {
     display: none;
 }
 
+.dropin-design .dropin-incrementer__decrease-button > svg, .dropin-design .dropin-incrementer__increase-button > svg {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-left: 2px;
+}
+
+.dropin-design .dropin-button--primary:hover {
+    --color: var(--color-button-bkg-blue);
+    --bg: var(--color-neutral-50);
+    --border: var(--color-button-bkg-blue);
+}
+
+.dropin-design .dropin-button:hover {
+    color: var(--color);
+    background-color: var(--bg);
+    border: unset;
+}

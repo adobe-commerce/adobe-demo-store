@@ -147,6 +147,7 @@
     --type-fixed-font-family: 'Adobe Clean', 'Roboto Mono', menlo, consolas, 'Liberation Mono',
     monospace;
     --background-color: var(--color-neutral-50);
+    --color-button-bkg-blue: #1473e6;
     --nav-height: 80px;
     --nav-max-width: 100%;
     --nav-icon-height: 18px;
