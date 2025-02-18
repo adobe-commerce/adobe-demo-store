@@ -284,7 +284,6 @@ code,
 pre {
   font: var(--type-body-2-default-font);
   letter-spacing: var(--type-body-2-default-letter-spacing);
-  font-family: var(--type-fixed-font-family);
 }
 
 pre {
@@ -324,7 +323,7 @@ a:not(.dropin-design a):hover {
 }
 
 .dropin-design a {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 /* buttons */
