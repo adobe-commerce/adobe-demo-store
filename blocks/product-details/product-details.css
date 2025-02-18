@@ -165,25 +165,13 @@
     grid-template-columns: auto auto auto;
 }
 
-.dropin-design .dropin-button {
-    border: unset;
-    box-shadow: 0 0 0 2px var(--color-neutral-300) inset;
-    color: var(--color-neutral-50);
-    background-color: #1473e6;
-    z-index: 1;
-    font-weight: bold;
-    letter-spacing: 0;
-    transition: color 0.3s linear, background-color 0.3s linear, border-color 0.3s linear;
-    line-height: 1;
-}
-
 .product-details-wrapper .product-details__buttons__add-to-cart {
     display: block;
 }
 
 .product-details-wrapper .dropin-button--primary {
     font-size: 1.6rem;
-    padding: 1.2rem 1.8rem 1.4rem;
+    font-weight: bold;
 }
 
 .dropin-design .dropin-incrementer__decrease-button, .dropin-design .dropin-incrementer__increase-button {
@@ -226,16 +214,4 @@
     width: 1.2rem;
     height: 1.2rem;
     margin-left: 2px;
-}
-
-.dropin-design .dropin-button--primary:hover {
-    --color: var(--color-button-bkg-blue);
-    --bg: var(--color-neutral-50);
-    --border: var(--color-button-bkg-blue);
-}
-
-.dropin-design .dropin-button:hover {
-    color: var(--color);
-    background-color: var(--bg);
-    border: unset;
 }
