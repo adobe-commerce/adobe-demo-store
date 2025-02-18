@@ -378,7 +378,7 @@ header .nav-search-input .search_autocomplete .popover-container {
   }
 
   header nav .nav-tools-panel {
-    top: calc(-12px + var(--nav-height));
+    top: calc(-20px + var(--nav-height));
   }
 
   header nav .minicart-panel {
