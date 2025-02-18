@@ -370,12 +370,12 @@ main a.button.secondary,
 button.button.secondary {
   background-color: unset;
   border: var(--shape-border-width-3) solid currentcolor;
-  color: var(--color-brand-700);
+  color: var(--color-neutral-900);
 }
 
 main a.button.secondary:hover,
 button.button.secondary:hover {
-  color: var(--color-button-hover);
+  color: var(--color-neutral-700);
 }
 
 main input:hover {
