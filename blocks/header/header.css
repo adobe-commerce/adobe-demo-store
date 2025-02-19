@@ -677,7 +677,7 @@ header nav .nav-sections .nav-sections-ul-wrapper > ul > li ul {
     header nav .nav-sections ul li {
         display: flex;
         align-items: center;
-        margin: 0px 1.4rem;
+        margin: 0 1.4rem;
     }
 
     header nav .nav-sections .nav-drop::after {
