@@ -7,26 +7,18 @@
       "items":
       [
         {
+          "name": "Demo Item",
+          "url": "products/shirts/ADB150",
+          "children": []
+        },
+        {
           "name": "Apparel",
           "url": "adobe/shop/apparel",
           "children":
           [
             {
-              "name": "Youth Tee",
-              "url": "https://main--adobe-demo-store--adobe-commerce.aem.live/products/shirts/ADB150",
-              "properties":
-              [
-                {
-                  "propname": "Display",
-                  "propvalue": "yes"
-                }
-              ],
-              "children":
-              []
-            },
-            {
               "name": "Shirts",
-              "url": "https://main--adobe-demo-store--adobe-commerce.aem.page/shirts",
+              "url": "adobe/shop/apparel/shirts",
               "properties":
               [
                 {
