@@ -276,7 +276,7 @@ header nav .nav-sections ul > li > ul > li {
     width: var(--megamenu-panel-width);
     top: 150%;
     padding: var(--spacing-small);
-    background-color: var(--color-neutral-50);
+    background-color: var(--color-neutral-500);
     white-space: initial;
     overflow-x: scroll;
   }
