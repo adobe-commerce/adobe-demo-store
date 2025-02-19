@@ -272,3 +272,29 @@ export function mapProductAcdl(product) {
     mainImageUrl: product?.images?.[0]?.url,
   };
 }
+
+window.categoryData = window.categoryData || fetch(`${window.origin}/data/data.json`)
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`Network response was not ok ${response.statusText}`);
+    }
+    return response.json();
+  });
+
+export function getProperty(items, propertyName, searchCriteria) {
+  const stack = [...items];
+
+  while (stack.length) {
+    const item = stack.pop();
+
+    if (Object.keys(searchCriteria).every((key) => item[key] === searchCriteria[key])) {
+      return item[propertyName];
+    }
+
+    if (item.children && item.children.length > 0) {
+      stack.push(...item.children);
+    }
+  }
+
+  return null;
+}

@@ -3,14 +3,26 @@ import { ProductListingPage } from '@dropins/storefront-search/containers/Produc
 import { render as provider } from '@dropins/storefront-search/render.js';
 import { readBlockConfig } from '../../scripts/aem.js';
 import { getConfigValue, getHeaders } from '../../scripts/configs.js';
+import { getProperty } from '../../scripts/commerce.js';
 
 // Initializer
 await import('../../scripts/initializers/search.js');
 
 export default async function decorate(block) {
-  const { category, urlpath, type } = readBlockConfig(block);
+  const { type } = readBlockConfig(block);
   block.textContent = '';
 
+  const urlpath = window.location.pathname.slice(1);
+
+  const categoryData = await window.categoryData;
+  const category = getProperty(
+    categoryData.data.categories.items,
+    'id',
+    { url: window.location.pathname.slice(1) },
+  );
+  if (!category) {
+    console.warn('missing category id in data/data.json for urlpath', urlpath);
+  }
   // PLP Config
   const plpConfig = {
     pageSize: 8,
@@ -24,7 +36,7 @@ export default async function decorate(block) {
     displayOutOfStock: true,
     allowAllProducts: false,
     imageCarousel: false,
-    optimizeImages: true,
+    optimizeImages: false,
     imageBaseWidth: 200,
     listview: true,
     currentCategoryUrlPath: type !== 'search' ? urlpath : null,

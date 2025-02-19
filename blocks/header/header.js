@@ -119,15 +119,6 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   }
 }
 
-const fetchMockData = await
-fetch(`${window.origin}/data/data.json`)
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`Network response was not ok ${response.statusText}`);
-    }
-    return response.json();
-  });
-
 /**
  * loads and decorates the header, mainly the nav
  * @param {Element} block The header block element
@@ -150,7 +141,18 @@ export default async function decorate(block) {
 
   classes.forEach((c, i) => {
     const section = nav.children[i];
-    if (section) section.classList.add(`nav-${c}`);
+    if (!section) {
+      const newSection = document.createElement('div');
+      newSection.classList.add(`nav-${c}`);
+      if (i === 0) {
+        nav.appendChild(newSection);
+      } else {
+        const prevSection = nav.children[i - 1];
+        prevSection.insertAdjacentElement('afterend', newSection);
+      }
+    } else {
+      section.classList.add(`nav-${c}`);
+    }
   });
 
   const navBrand = nav.querySelector('.nav-brand');
@@ -173,7 +175,8 @@ export default async function decorate(block) {
   }
 
   const navSections = nav.querySelector('.nav-sections');
-  const data = fetchMockData?.data?.categories?.items;
+  const dataPromise = await window.categoryData;
+  const data = dataPromise?.data?.categories?.items;
 
   if (navSections) {
     const navSectionsUlWrapper = document.createElement('div');
@@ -213,7 +216,7 @@ export default async function decorate(block) {
           const subCategoryUlLi = document.createElement('li');
           const subCategoryLink = document.createElement('a');
 
-          subCategoryLink.href = `${window.location.origin}/${ele.url}#${e.name}`;
+          subCategoryLink.href = `${window.location.origin}/${e.url}`;
           subCategoryLink.textContent = e.name;
           subCategoryUlLi.append(subCategoryLink);
           subCategoryUl.append(subCategoryUlLi);
@@ -326,7 +329,7 @@ export default async function decorate(block) {
     'cart/data',
     (cartData) => {
       if (cartData?.totalQuantity) {
-        cartButton.setAttribute('data-count', data.totalQuantity);
+        cartButton.setAttribute('data-count', cartData.totalQuantity);
       } else {
         cartButton.setAttribute('data-count', 0);
       }
