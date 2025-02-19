@@ -258,7 +258,7 @@ header nav .nav-sections ul > li > ul > li {
   }
 
   header nav .nav-sections .nav-drop[aria-expanded='true'] > ul {
-    height: var(--megamenu-panel-height);
+    height: auto;
     flex-flow: column wrap;
   }
 
@@ -272,25 +272,13 @@ header nav .nav-sections ul > li > ul > li {
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] > ul {
     display: flex;
     position: absolute;
-    left: -24px;
-    width: var(--megamenu-panel-width);
+    left: -2px;
+    width: auto;
     top: 150%;
     padding: var(--spacing-small);
-    background-color: var(--color-neutral-500);
+    background-color: var(--color-neutral-50);
     white-space: initial;
-    overflow-x: scroll;
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li > ul::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 16px;
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid var(--color-neutral-500);
+    text-wrap: nowrap;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul > li {
