@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { render as provider } from '@dropins/storefront-search/render.js';
 import SearchPopover from '@dropins/storefront-search/containers/SearchPopover.js';
 
