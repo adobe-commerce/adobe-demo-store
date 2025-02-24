@@ -12,6 +12,9 @@ import { publishShoppingCartViewEvent } from '@dropins/storefront-cart/api.js';
 import AuthCombine from '@dropins/storefront-auth/containers/AuthCombine.js';
 import { render as AuthProvider } from '@dropins/storefront-auth/render.js';
 
+import renderAuthCombine from './renderAuthCombine.js';
+import { renderAuthDropdown } from './renderAuthDropdown.js';
+
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
@@ -108,6 +111,9 @@ const handleAuthenticated = (authenticated) => {
   if (!authenticated) return;
   removeModal();
   removeOverlaySpinner();
+  document.querySelector('.nav-tools a.sign-in').remove();
+  const navTools = document.querySelector('.nav-tools');
+  renderAuthDropdown(navTools);
 };
 
 /**
@@ -412,6 +418,7 @@ export default async function decorate(block) {
   // Sign-in link
   const loginLink = document.createElement('a');
   loginLink.textContent = 'Sign in';
+  loginLink.classList.add('sign-in');
   loginLink.addEventListener('click', (e) => {
     e.preventDefault();
     const signInForm = document.createElement('div');
@@ -446,6 +453,10 @@ export default async function decorate(block) {
   navWrapper.className = 'nav-wrapper';
   navWrapper.append(nav);
   block.append(navWrapper);
+  renderAuthCombine(
+    navSections,
+    () => !isDesktop.matches && toggleMenu(nav, navSections, false),
+  );
 }
 
 events.on('authenticated', handleAuthenticated);

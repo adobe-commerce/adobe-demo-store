@@ -458,6 +458,8 @@ header .nav-search-input .search_autocomplete .popover-container {
 .dropdown-wrapper.nav-tools-wrapper .nav-dropdown-button {
   font: var(--type-body-1-default-font) !important;
   letter-spacing: var(--type-body-1-default-letter-spacing) !important;
+  color: var(--color-neutral-900);
+  font-weight: bold;
   background-color: transparent;
   margin: 0;
   padding: 0;
