@@ -167,6 +167,10 @@ header nav .nav-sections {
   transform: translateX(calc(-100% - 20px - calc(calc(100vw - 720px) / 2)));
 }
 
+header nav[aria-expanded='false'] .nav-sections {
+    height: auto;
+}
+
 header nav[aria-expanded='true'] .nav-sections {
   overflow-y: auto;
 }
