@@ -1,0 +1,67 @@
+.cookie-popup-wrapper {
+  position: fixed;
+  box-sizing: border-box;
+  color: var(--color-neutral-50);
+  bottom: 0;
+  z-index: 999;
+  background-color: var(--color-brand-700);
+  box-shadow: rgb(0 0 0) 0 0 50px;
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  width: 100%;
+}
+
+.cookie-popup-wrapper:focus-visible {
+  outline: -webkit-focus-ring-color auto 1px;
+}
+
+.cookie-popup-wrapper .cookie-popup.block {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0;
+}
+
+.cookie-popup-wrapper .cookie-popup.block p {
+  font: var(--type-body-1-strong-font);
+  letter-spacing: var(--type-body-1-strong-letter-spacing);
+  text-align: justify;
+  padding: 0;
+  margin: 0;
+}
+
+.cookie-popup-wrapper .cookie-popup.block a {
+  text-decoration: none;
+  font: var(--type-body-1-strong-font);
+  letter-spacing: var(--type-body-1-strong-letter-spacing);
+  color: var(--color-neutral-50);
+  font-weight: bold;
+}
+
+.cookie-popup-wrapper .cookie-popup.block a:hover {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.cookie-popup-wrapper .cookie-popup.block .button-container {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 0 auto;
+  text-align: center;
+  width: 20px;
+  background-color: var(--color-neutral-900);
+  color: var(--color-neutral-50);
+  padding: var(--spacing-xsmall);
+  font-weight: bold;
+}
+
+.cookie-popup-wrapper .cookie-popup.block .button-container::before {
+  content: 'X';
+  height: 100%;
+}
+
+/* Mobile Nav */
+@media (width < 990px) {
+  .cookie-popup-wrapper .cookie-popup.block div:first-child {
+    width: 95%;
+  }
+}
