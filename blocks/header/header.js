@@ -2,12 +2,24 @@
 
 // Drop-in Tools
 import { events } from '@dropins/tools/event-bus.js';
+// Dropin Components
+import { ProgressSpinner, provider as UI } from '@dropins/tools/components.js';
 
 // Cart dropin
 import { publishShoppingCartViewEvent } from '@dropins/storefront-cart/api.js';
 
+// Auth Dropin
+import AuthCombine from '@dropins/storefront-auth/containers/AuthCombine.js';
+import { render as AuthProvider } from '@dropins/storefront-auth/render.js';
+
+import renderAuthCombine from './renderAuthCombine.js';
+import { renderAuthDropdown } from './renderAuthDropdown.js';
+
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
+
+// Block-level
+import createModal from '../modal/modal.js';
 
 // media query match that indicates mobile/tablet width
 const isDesktop = window.matchMedia('(min-width: 900px)');
@@ -16,7 +28,9 @@ function closeOnEscape(e) {
   if (e.code === 'Escape') {
     const nav = document.getElementById('nav');
     const navSections = nav.querySelector('.nav-sections');
-    const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
+    const navSectionExpanded = navSections.querySelector(
+      '[aria-expanded="true"]',
+    );
     if (navSectionExpanded && isDesktop.matches) {
       // eslint-disable-next-line no-use-before-define
       toggleAllNavSections(navSections);
@@ -33,7 +47,9 @@ function closeOnFocusLost(e) {
   const nav = e.currentTarget;
   if (!nav.contains(e.relatedTarget)) {
     const navSections = nav.querySelector('.nav-sections');
-    const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
+    const navSectionExpanded = navSections.querySelector(
+      '[aria-expanded="true"]',
+    );
     if (navSectionExpanded && isDesktop.matches) {
       // eslint-disable-next-line no-use-before-define
       toggleAllNavSections(navSections, false);
@@ -59,20 +75,58 @@ function focusNavSection() {
   document.activeElement.addEventListener('keydown', openOnKeydown);
 }
 
+// Container and component references
+let loader;
+let modal;
+
+// Dynamic containers and components
+const showModal = async (content) => {
+  modal = await createModal([content]);
+  modal.showModal();
+};
+
+const removeModal = () => {
+  if (!modal) return;
+  modal.removeModal();
+  modal = null;
+};
+
+const displayOverlaySpinner = async () => {
+  if (loader) return;
+
+  loader = await UI.render(ProgressSpinner, {
+    className: '.checkout__overlay-spinner',
+  })(document);
+};
+
+const removeOverlaySpinner = () => {
+  if (!loader) return;
+
+  loader.remove();
+  loader = null;
+  document.innerHTML = '';
+};
+
+const handleAuthenticated = (authenticated) => {
+  if (!authenticated) return;
+  removeModal();
+  removeOverlaySpinner();
+  document.querySelector('.nav-tools a.sign-in').remove();
+  const navTools = document.querySelector('.nav-tools');
+  renderAuthDropdown(navTools);
+};
+
 /**
  * Toggles all nav sections
  * @param {Element} sections The container element
  * @param {Boolean} expanded Whether the element should be expanded or collapsed
  */
 function toggleAllNavSections(sections, expanded = false) {
-  sections
-    .querySelectorAll('.nav-sections > ul > li')
-    .forEach((section) => {
-      section.setAttribute('aria-expanded', expanded);
-    });
+  sections.querySelectorAll('.nav-sections > ul > li').forEach((section) => {
+    section.setAttribute('aria-expanded', expanded);
+  });
 
-  const expandedItems = sections
-    .querySelectorAll('.expanded');
+  const expandedItems = sections.querySelectorAll('.expanded');
   if (expandedItems) {
     [...expandedItems].map((e) => e.classList.remove('expanded'));
   }
@@ -89,8 +143,14 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   const button = nav.querySelector('.nav-hamburger button');
   document.body.style.overflowY = expanded || isDesktop.matches ? '' : 'hidden';
   nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-  toggleAllNavSections(navSections, expanded || isDesktop.matches ? 'false' : 'true');
-  button.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
+  toggleAllNavSections(
+    navSections,
+    expanded || isDesktop.matches ? 'false' : 'true',
+  );
+  button.setAttribute(
+    'aria-label',
+    expanded ? 'Open navigation' : 'Close navigation',
+  );
   // enable nav dropdown keyboard accessibility
   const navDrops = navSections.querySelectorAll('.nav-drop');
   if (isDesktop.matches) {
@@ -244,7 +304,10 @@ export default async function decorate(block) {
           if (isDesktop.matches) {
             const expanded = navSection.getAttribute('aria-expanded') === 'true';
             toggleAllNavSections(navSections);
-            navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+            navSection.setAttribute(
+              'aria-expanded',
+              expanded ? 'false' : 'true',
+            );
           }
         });
       });
@@ -283,7 +346,9 @@ export default async function decorate(block) {
     }
   }
 
-  navTools.querySelector('.nav-search-button').addEventListener('click', () => toggleSearch());
+  navTools
+    .querySelector('.nav-search-button')
+    .addEventListener('click', () => toggleSearch());
 
   /** Mini Cart */
   const excludeMiniCartFromPaths = ['/checkout'];
@@ -307,7 +372,9 @@ export default async function decorate(block) {
 
   // load nav as fragment
   const miniCartMeta = getMetadata('mini-cart');
-  const miniCartPath = miniCartMeta ? new URL(miniCartMeta, window.location).pathname : '/mini-cart';
+  const miniCartPath = miniCartMeta
+    ? new URL(miniCartMeta, window.location).pathname
+    : '/mini-cart';
   loadFragment(miniCartPath).then((miniCartFragment) => {
     minicartPanel.append(miniCartFragment.firstElementChild);
   });
@@ -350,8 +417,24 @@ export default async function decorate(block) {
 
   // Sign-in link
   const loginLink = document.createElement('a');
-  loginLink.href = '/customer/login';
   loginLink.textContent = 'Sign in';
+  loginLink.classList.add('sign-in');
+  loginLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    const signInForm = document.createElement('div');
+
+    AuthProvider.render(AuthCombine, {
+      signInFormConfig: {
+        renderSignUpLink: true,
+        onSuccessCallback: () => {
+          displayOverlaySpinner();
+        },
+      },
+      resetPasswordFormConfig: {},
+    })(signInForm);
+
+    showModal(signInForm);
+  });
   navTools.append(loginLink);
 
   // hamburger for mobile
@@ -370,4 +453,10 @@ export default async function decorate(block) {
   navWrapper.className = 'nav-wrapper';
   navWrapper.append(nav);
   block.append(navWrapper);
+  renderAuthCombine(
+    navSections,
+    () => !isDesktop.matches && toggleMenu(nav, navSections, false),
+  );
 }
+
+events.on('authenticated', handleAuthenticated);
