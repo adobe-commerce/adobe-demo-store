@@ -531,7 +531,7 @@ header nav .nav-sections .nav-sections-ul-wrapper > ul > li > a {
   }
 }
 
-@media (width > 901px) {
+@media (width > 991px) {
   header nav[aria-expanded='true'] .nav-sections,
   header nav[aria-expanded='true'] .nav-sections .nav-sections-ul-wrapper {
     display: flex;
@@ -693,7 +693,7 @@ header nav .nav-sections .nav-sections-ul-wrapper > ul > li > a {
 }
 
 /* Mobile Nav */
-@media (width < 900px) {
+@media (width < 990px) {
   header nav .nav-sections ul {
     padding: 0;
   }
