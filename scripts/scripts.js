@@ -19,7 +19,8 @@ import {
   loadSection,
   loadSections,
   loadCSS,
-  sampleRUM, loadCookieBlock
+  sampleRUM,
+  loadCookieBlock,
 } from './aem.js';
 import { trackHistory } from './commerce.js';
 import initializeDropins from './initializers/index.js';

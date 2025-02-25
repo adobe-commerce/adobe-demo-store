@@ -23,7 +23,6 @@ function openLinkInNewTab(cookieText) {
 }
 
 export default async function decorate(block) {
-  console.log('decorate');
   const domainName = String(window.location).split(window.location.pathname)[0];
   const cookiePopUpPath = `${domainName}/cookie-popup`;
   const resp = await fetch(`${cookiePopUpPath}.plain.html`);
