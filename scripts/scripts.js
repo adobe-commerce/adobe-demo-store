@@ -20,6 +20,7 @@ import {
   loadSections,
   loadCSS,
   sampleRUM,
+  loadCookieBlock,
 } from './aem.js';
 import { trackHistory } from './commerce.js';
 import initializeDropins from './initializers/index.js';
@@ -288,6 +289,16 @@ async function loadLazy(doc) {
     loadFonts(),
     import('./acdl/adobe-client-data-layer.min.js'),
   ]);
+
+  const consentCookie = localStorage.getItem('cookie_consent_cookie_20231122350');
+  if (!consentCookie) {
+    const cookieContainer = document.createElement('div');
+    document.body.append(cookieContainer);
+    await Promise.all([
+      loadCookieBlock(cookieContainer),
+    ]);
+    cookieContainer.focus();
+  }
 
   if (sessionStorage.getItem('acdl:debug')) {
     import('./acdl/validate.js');
