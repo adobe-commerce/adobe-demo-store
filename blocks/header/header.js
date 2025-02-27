@@ -12,9 +12,7 @@ import { publishShoppingCartViewEvent } from '@dropins/storefront-cart/api.js';
 import AuthCombine from '@dropins/storefront-auth/containers/AuthCombine.js';
 import { render as AuthProvider } from '@dropins/storefront-auth/render.js';
 
-import renderAuthCombine from './renderAuthCombine.js';
 import { renderAuthDropdown } from './renderAuthDropdown.js';
-
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
@@ -76,7 +74,6 @@ function focusNavSection() {
 }
 
 // Container and component references
-let loader;
 let modal;
 
 // Dynamic containers and components
@@ -91,26 +88,9 @@ const removeModal = () => {
   modal = null;
 };
 
-const displayOverlaySpinner = async () => {
-  if (loader) return;
-
-  loader = await UI.render(ProgressSpinner, {
-    className: '.checkout__overlay-spinner',
-  })(document);
-};
-
-const removeOverlaySpinner = () => {
-  if (!loader) return;
-
-  loader.remove();
-  loader = null;
-  document.innerHTML = '';
-};
-
 const handleAuthenticated = (authenticated) => {
   if (!authenticated) return;
   removeModal();
-  removeOverlaySpinner();
   document.querySelector('.nav-tools a.sign-in').remove();
   const navTools = document.querySelector('.nav-tools');
   renderAuthDropdown(navTools);
@@ -429,9 +409,7 @@ export default async function decorate(block) {
     AuthProvider.render(AuthCombine, {
       signInFormConfig: {
         renderSignUpLink: true,
-        onSuccessCallback: () => {
-          displayOverlaySpinner();
-        },
+        onSuccessCallback: () => {},
       },
       resetPasswordFormConfig: {},
     })(signInForm);
@@ -456,10 +434,6 @@ export default async function decorate(block) {
   navWrapper.className = 'nav-wrapper';
   navWrapper.append(nav);
   block.append(navWrapper);
-  renderAuthCombine(
-    navSections,
-    () => !isDesktop.matches && toggleMenu(nav, navSections, false),
-  );
 }
 
 events.on('authenticated', handleAuthenticated);
