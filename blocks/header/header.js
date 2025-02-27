@@ -2,9 +2,6 @@
 
 // Drop-in Tools
 import { events } from '@dropins/tools/event-bus.js';
-// Dropin Components
-import { ProgressSpinner, provider as UI } from '@dropins/tools/components.js';
-
 // Cart dropin
 import { publishShoppingCartViewEvent } from '@dropins/storefront-cart/api.js';
 
