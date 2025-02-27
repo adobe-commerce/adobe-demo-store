@@ -658,14 +658,6 @@ async function loadFooter(footer) {
   return loadBlock(footerBlock);
 }
 
-// Loads a block named 'footer' into footer
-async function loadCookieBlock(cookieContainer) {
-  const headerBlock = buildBlock('cookie-popup', '');
-  cookieContainer.append(headerBlock);
-  decorateBlock(headerBlock);
-  return loadBlock(headerBlock);
-}
-
 /**
  * Wait for Image.
  * @param {Element} section section element
@@ -736,7 +728,6 @@ export {
   loadCSS,
   loadFooter,
   loadHeader,
-  loadCookieBlock,
   loadScript,
   loadSection,
   loadSections,
