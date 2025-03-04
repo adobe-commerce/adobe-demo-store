@@ -6,15 +6,31 @@ import { events } from '@dropins/tools/event-bus.js';
 import { publishShoppingCartViewEvent } from '@dropins/storefront-cart/api.js';
 
 // Auth Dropin
+import * as authApi from '@dropins/storefront-auth/api.js';
+import { render as authRenderer } from '@dropins/storefront-auth/render.js';
 import AuthCombine from '@dropins/storefront-auth/containers/AuthCombine.js';
-import { render as AuthProvider } from '@dropins/storefront-auth/render.js';
 
-import { renderAuthDropdown } from './renderAuthDropdown.js';
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
 // Block-level
 import createModal from '../modal/modal.js';
+import { getCookie } from '../../scripts/configs.js';
+
+// Container and component references
+let modal;
+
+// Dynamic containers and components
+const showModal = async (content) => {
+  modal = await createModal([content]);
+  modal.showModal();
+};
+
+const removeModal = () => {
+  if (!modal) return;
+  modal.removeModal();
+  modal = null;
+};
 
 // media query match that indicates mobile/tablet width
 const isDesktop = window.matchMedia('(min-width: 900px)');
@@ -69,29 +85,6 @@ function openOnKeydown(e) {
 function focusNavSection() {
   document.activeElement.addEventListener('keydown', openOnKeydown);
 }
-
-// Container and component references
-let modal;
-
-// Dynamic containers and components
-const showModal = async (content) => {
-  modal = await createModal([content]);
-  modal.showModal();
-};
-
-const removeModal = () => {
-  if (!modal) return;
-  modal.removeModal();
-  modal = null;
-};
-
-const handleAuthenticated = (authenticated) => {
-  if (!authenticated) return;
-  removeModal();
-  document.querySelector('.nav-tools a.sign-in').remove();
-  const navTools = document.querySelector('.nav-tools');
-  renderAuthDropdown(navTools);
-};
 
 /**
  * Toggles all nav sections
@@ -395,25 +388,80 @@ export default async function decorate(block) {
     }
   });
 
-  // Sign-in link
-  const loginLink = document.createElement('a');
-  loginLink.textContent = 'Sign in';
-  loginLink.classList.add('sign-in');
-  loginLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    const signInForm = document.createElement('div');
+  /* User log in */
+  const dropdownElement = document.createRange().createContextualFragment(`
+     <div class="dropdown-wrapper nav-tools-wrapper">
+        <button type="button" class="nav-dropdown-button" aria-haspopup="dialog" aria-expanded="false" aria-controls="login-modal"></button>
+        <div class="nav-auth-menu-panel nav-tools-panel">
+          <div id="auth-dropin-container"></div>
+          <ul class="authenticated-user-menu">
+             <li><a href="/customer/account">My Account</a></li>
+              <li><button>Logout</button></li>
+          </ul>
+        </div>
+     </div>`);
 
-    AuthProvider.render(AuthCombine, {
-      signInFormConfig: {
-        renderSignUpLink: true,
-        onSuccessCallback: () => {},
-      },
-      resetPasswordFormConfig: {},
-    })(signInForm);
+  navTools.append(dropdownElement);
 
-    showModal(signInForm);
+  const authDropDownPanel = navTools.querySelector('.nav-auth-menu-panel');
+  const authDropinContainer = navTools.querySelector('#auth-dropin-container');
+  const loginButton = navTools.querySelector('.nav-dropdown-button');
+  const logoutButton = navTools.querySelector(
+    '.authenticated-user-menu > li > button',
+  );
+
+  // Initially hide the authDropDownMenuList
+  authDropDownPanel.style.display = 'none';
+
+  // Function to show the authDropDownMenuList
+  function showAuthMenu() {
+    authDropDownPanel.style.display = 'block';
+    authDropinContainer.style.display = 'none';
+  }
+
+  // Function to hide the authDropDownMenuList
+  function hideAuthMenu() {
+    authDropDownPanel.style.display = 'none';
+    authDropinContainer.style.display = 'block';
+  }
+
+  // Function to show the dropdown or modal based on authentication state
+  async function showDropDownAuthModal(state) {
+    const show = state ?? !authDropDownPanel.classList.contains('nav-tools-panel--show');
+
+    if (show && !loginButton.classList.contains('authenticated')) {
+      // Show modal for unauthenticated users
+      const signInForm = document.createElement('div');
+      authRenderer.render(AuthCombine, {
+        signInFormConfig: {
+          renderSignUpLink: true,
+          onSuccessCallback: () => {},
+        },
+        resetPasswordFormConfig: {},
+      })(signInForm);
+
+      showModal(signInForm);
+    } else if (loginButton.classList.contains('authenticated')) {
+      // Show dropdown for authenticated users
+      showAuthMenu();
+    }
+  }
+
+  loginButton.addEventListener('click', () => showDropDownAuthModal());
+
+  document.addEventListener('click', async (e) => {
+    const clickOnDropDownPanel = authDropDownPanel.contains(e.target);
+    const clickOnLoginButton = loginButton.contains(e.target);
+
+    if (!clickOnDropDownPanel && !clickOnLoginButton) {
+      hideAuthMenu();
+    }
   });
-  navTools.append(loginLink);
+
+  logoutButton.addEventListener('click', async () => {
+    await authApi.revokeCustomerToken();
+    window.location.href = '/';
+  });
 
   // hamburger for mobile
   const hamburger = document.createElement('div');
@@ -432,7 +480,40 @@ export default async function decorate(block) {
   navWrapper.append(nav);
   block.append(navWrapper);
 
-  events.on('authenticated', handleAuthenticated, {
-    eager: true,
-  });
+  const updateDropDownUI = (isAuthenticated) => {
+    const getUserTokenCookie = getCookie('auth_dropin_user_token');
+    const getUserNameCookie = getCookie('auth_dropin_firstname');
+
+    if (isAuthenticated || getUserTokenCookie) {
+      loginButton.classList.add('authenticated');
+      loginButton.textContent = `Hi, ${getUserNameCookie}`;
+    } else {
+      loginButton.classList.remove('authenticated');
+      loginButton.innerHTML = `
+      <svg
+          width="25"
+          height="25"
+          viewBox="0 0 24 24"
+          aria-label="My Account"
+          >
+          <g fill="none" stroke="#000000" stroke-width="1.5">
+            <circle cx="12" cy="6" r="4"></circle>
+            <path d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5Z"></path>
+          </g>
+      </svg>`;
+    }
+
+    removeModal();
+    hideAuthMenu();
+  };
+
+  events.on(
+    'authenticated',
+    (isAuthenticated) => {
+      updateDropDownUI(isAuthenticated);
+    },
+    {
+      eager: true,
+    },
+  );
 }
