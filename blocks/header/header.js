@@ -431,6 +431,8 @@ export default async function decorate(block) {
   navWrapper.className = 'nav-wrapper';
   navWrapper.append(nav);
   block.append(navWrapper);
-}
 
-events.on('authenticated', handleAuthenticated);
+  events.on('authenticated', handleAuthenticated, {
+    eager: true,
+  });
+}
