@@ -55,11 +55,13 @@ export default async function initializeDropins() {
   const token = getUserTokenCookie();
   // set auth headers
   setAuthHeaders(!!token);
-  // emit authenticated event if token has changed
-  events.emit('authenticated', !!token);
 
   // Event Bus Logger
   events.enableLogger(true);
+
+  // emit authenticated event if token has changed
+  events.emit('authenticated', !!token);
+
   // Set Fetch Endpoint (Global)
   setEndpoint(await getConfigValue('commerce-core-endpoint'));
 
