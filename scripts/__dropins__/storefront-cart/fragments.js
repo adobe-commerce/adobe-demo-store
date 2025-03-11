@@ -29,7 +29,7 @@ const e = `
       }
     }
   }
-`, t = `
+`, _ = `
   fragment CUSTOMIZABLE_OPTIONS_FRAGMENT on SelectedCustomizableOption {
     type
     customizable_option_uid
@@ -45,7 +45,47 @@ const e = `
       }
     }
   }
-`, a = (``), r = `fragment CART_ITEM_FRAGMENT on CartItemInterface {
+`, a = ``, t = `fragment APPLIED_GIFT_CARDS_FRAGMENT on AppliedGiftCard {
+  __typename
+  code
+  applied_balance {
+    value
+    currency
+  }
+  current_balance {
+    value
+    currency
+  }
+  expiration_date
+}`, r = `fragment GIFT_MESSAGE_FRAGMENT on GiftMessage {
+  __typename
+  from
+  to
+  message
+}`, i = (`fragment GIFT_WRAPPING_FRAGMENT on GiftWrapping {
+  __typename
+  uid
+  design
+  image {
+    url
+  }
+  price {
+    value
+    currency
+  }
+}`), n = `fragment AVAILABLE_GIFT_WRAPPING_FRAGMENT on GiftWrapping {
+  __typename
+  uid
+  design
+  image {
+    url
+    label
+  }
+  price {
+    currency
+    value
+  }
+}`, l = `fragment CART_ITEM_FRAGMENT on CartItemInterface {
   __typename
   uid
   quantity
@@ -102,6 +142,12 @@ const e = `
   product {
     name
     sku
+    gift_message_available
+    gift_wrapping_available
+    gift_wrapping_price {
+      currency
+      value
+    }
     thumbnail {
       url
       label
@@ -134,11 +180,29 @@ const e = `
     }
   }
   ... on SimpleCartItem {
+    available_gift_wrapping {
+      ...AVAILABLE_GIFT_WRAPPING_FRAGMENT
+    }
+    gift_message {
+      ...GIFT_MESSAGE_FRAGMENT
+    }
+    gift_wrapping {
+      ...GIFT_WRAPPING_FRAGMENT
+    }
     customizable_options {
       ...CUSTOMIZABLE_OPTIONS_FRAGMENT
     }
   }
   ... on ConfigurableCartItem {
+    available_gift_wrapping {
+      ...AVAILABLE_GIFT_WRAPPING_FRAGMENT
+    }
+    gift_message {
+      ...GIFT_MESSAGE_FRAGMENT
+    }
+    gift_wrapping {
+      ...GIFT_WRAPPING_FRAGMENT
+    }
     configurable_options {
       configurable_product_option_uid
       option_label
@@ -162,6 +226,15 @@ const e = `
     }
   }
   ... on BundleCartItem {
+    available_gift_wrapping {
+      ...AVAILABLE_GIFT_WRAPPING_FRAGMENT
+    }
+    gift_message {
+      ...GIFT_MESSAGE_FRAGMENT
+    }
+    gift_wrapping {
+      ...GIFT_WRAPPING_FRAGMENT
+    }
     bundle_options {
       uid
       label
@@ -185,12 +258,55 @@ const e = `
   }
 }
 ${e}
-${t}
-${a}`, n = `fragment CART_FRAGMENT on Cart {
+${_}
+${a}
+${i}
+${r}
+${n}`, c = `fragment CART_FRAGMENT on Cart {
   id
   total_quantity
   is_virtual
+  applied_gift_cards {
+    ...APPLIED_GIFT_CARDS_FRAGMENT
+  }
+  gift_receipt_included
+  printed_card_included
+  gift_message {
+    ...GIFT_MESSAGE_FRAGMENT
+  }
+  gift_wrapping {
+    ...GIFT_WRAPPING_FRAGMENT
+  }
+  available_gift_wrappings {
+    ...AVAILABLE_GIFT_WRAPPING_FRAGMENT
+  }
   prices {
+    gift_options {
+      gift_wrapping_for_items {
+        currency
+        value
+      }
+      gift_wrapping_for_items_incl_tax {
+        currency
+        value
+      }
+      gift_wrapping_for_order {
+        currency
+        value
+      }
+      gift_wrapping_for_order_incl_tax {
+        currency
+        value
+      }
+      printed_card {
+        currency
+        value
+      }
+      printed_card_incl_tax {
+        currency
+        value
+      }
+    }
     subtotal_with_discount_excluding_tax {
       currency
       value
@@ -248,9 +364,14 @@ ${a}`, n = `fragment CART_FRAGMENT on Cart {
     postcode
   }
 }
-${r}`;
+${l}
+${t}`;
 export {
-n as CART_FRAGMENT,
-r as CART_ITEM_FRAGMENT,
-a as DOWNLOADABLE_CART_ITEMS_FRAGMENT
+t as APPLIED_GIFT_CARDS_FRAGMENT,
+n as AVAILABLE_GIFT_WRAPPING_FRAGMENT,
+c as CART_FRAGMENT,
+l as CART_ITEM_FRAGMENT,
+a as DOWNLOADABLE_CART_ITEMS_FRAGMENT,
+r as GIFT_MESSAGE_FRAGMENT,
+i as GIFT_WRAPPING_FRAGMENT
 };
