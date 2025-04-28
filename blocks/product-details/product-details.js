@@ -51,8 +51,8 @@ export default async function decorate(block) {
           <div class="product-details__quantity__wrapper">
             <div class="product-details__quantity__label">
               Quantity
-            </div>  
-            <div class="product-details__quantity"></div>        
+            </div>
+            <div class="product-details__quantity"></div>
           </div>
           <div class="product-details__buttons">
             <div class="product-details__buttons__add-to-cart"></div>
