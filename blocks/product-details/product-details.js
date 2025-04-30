@@ -44,6 +44,7 @@ export default async function decorate(block) {
       <div class="product-details__right-column">
         <div class="product-details__gallery"></div>
         <div class="product-details__header"></div>
+        <div class="product-details__ratings"></div>
         <div class="product-details__price"></div>
         <div class="product-details__short-description"></div>
         <div class="product-details__configuration">
@@ -85,6 +86,7 @@ export default async function decorate(block) {
   );
   const $description = fragment.querySelector('.product-details__description');
   const $attributes = fragment.querySelector('.product-details__attributes');
+  const $ratings = fragment.querySelector('.product-details__ratings');
 
   block.appendChild(fragment);
 
@@ -228,6 +230,8 @@ export default async function decorate(block) {
         setMetaTags(product);
         document.title = product.name;
       }
+      // Ratings from gql extensibility
+      $ratings.append(product.ratings.average, product.ratings.total);
     },
     { eager: true },
   );
