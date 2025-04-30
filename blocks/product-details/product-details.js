@@ -231,7 +231,7 @@ export default async function decorate(block) {
         document.title = product.name;
       }
       // Ratings from gql extensibility
-      $ratings.append(product.ratings.average, product.ratings.total);
+      $ratings.append(`${product.rating.average} stars average (out of ${product.rating.total} ratings)`);
     },
     { eager: true },
   );

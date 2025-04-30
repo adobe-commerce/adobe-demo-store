@@ -55,6 +55,11 @@ await initializeDropin(async () => {
   const models = {
     ProductDetails: {
       initialData: { ...product },
+      transformer: (data) => {
+        // see that data.rating exists from initial query
+        console.log(data.rating);
+        return data;
+      },
     },
   };
 
