@@ -30,11 +30,13 @@ export const calcEnvironment = () => {
 };
 
 function buildConfigURL(environment) {
+  // 📝 Overriding the environment to use the override file for this demo branch
+  // eslint-disable-next-line no-unused-vars
   const env = environment || calcEnvironment();
-  let fileName = 'override-configs.json';
-  if (env !== 'prod') {
-    fileName = `override-configs-${env}.json`;
-  }
+  const fileName = 'configs-override.json';
+  // if (env !== 'prod') {
+  //   fileName = `override-configs-${env}.json`;
+  // }
   const configURL = new URL(`${window.location.origin}/${fileName}`);
   return configURL;
 }
