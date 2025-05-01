@@ -31,9 +31,9 @@ export const calcEnvironment = () => {
 
 function buildConfigURL(environment) {
   const env = environment || calcEnvironment();
-  let fileName = 'configs.json';
+  let fileName = 'override-configs.json';
   if (env !== 'prod') {
-    fileName = `configs-${env}.json`;
+    fileName = `override-configs-${env}.json`;
   }
   const configURL = new URL(`${window.location.origin}/${fileName}`);
   return configURL;
