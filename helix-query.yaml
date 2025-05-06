@@ -1,5 +1,15 @@
 version: 1
 indices:
+  index:
+    target: /full-index.json
+    exclude:
+      - 'drafts/**'
+      - '/structured-data/**'
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: |
+          attribute(el, 'content')
   sitemap:
     target: /sitemap.json
     exclude:
