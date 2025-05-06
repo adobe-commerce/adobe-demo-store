@@ -4,7 +4,7 @@ indices:
     target: /full-index.json
     exclude:
       - 'drafts/**'
-      - '/structured-data/**'
+      - 'structured-data/**'
     properties:
       title:
         select: head > meta[property="og:title"]
